@@ -5,8 +5,6 @@ from configparser import ConfigParser
 from confluent_kafka import Consumer
 from confluent_kafka import OFFSET_BEGINNING
 
-logger = logging.getLogger(__name__)
-
 class ConsumerServer:
     """
     Defines the bases kafka consumer class
@@ -72,6 +70,7 @@ class ConsumerServer:
         logger.info(f"consumer {self.conf.get('consumer','group.id')} closed!!")
         
 if __name__ == "__main__":
+    logger = logging.getLogger(__name__)
     config = ConfigParser()
     config.read("app.cfg")
     consumer_server = ConsumerServer(config)

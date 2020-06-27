@@ -6,8 +6,6 @@ from confluent_kafka import Producer
 from confluent_kafka.admin import AdminClient, NewTopic
 from tqdm import tqdm
 
-logger = logging.getLogger(__name__)
-
 class ProducerServer:
     """
     Setup Basic Kafka Servers
@@ -109,6 +107,8 @@ class ProducerServer:
             logger.error("producer close incomplete - skipping")
             
 if __name__ == "__main__":
+    
+    logger = logging.getLogger(__name__)
     config = ConfigParser()
     config.read("app.cfg")
     producer_server = ProducerServer(config)
