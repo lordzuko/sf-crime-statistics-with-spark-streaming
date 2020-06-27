@@ -80,8 +80,8 @@ def run_spark_job(spark, conf):
     crime_type_count_query = crime_type_count_agg_df \
         .writeStream \
         .trigger(processingTime="10 seconds") \
+        .outputMode("Complete") \
         .format("console") \
-        .option("truncate", "false") \
         .start()
     # attach a ProgressReporter
     crime_type_count_query.awaitTermination()
@@ -94,8 +94,8 @@ def run_spark_job(spark, conf):
     crime_per_location_query = crime_per_location_agg_df \
         .writeStream \
         .trigger(processingTime="10 seconds") \
+        .outputMode("Complete") \
         .format("console") \
-        .option("truncate", "false") \
         .start()
     # attach a ProgressReporter
     crime_per_location_query.awaitTermination()
@@ -111,7 +111,7 @@ def run_spark_job(spark, conf):
     # rename disposition_code column to disposition
     radio_code_df = radio_code_df.withColumnRenamed("disposition_code", "disposition")
 
-    # TODO join on disposition column
+    # join on disposition column
     logger.info("Joinging agg data and radio codes")
     join_df = distinct_table \
         .join(radio_code_df, "disposition", "left") \
@@ -121,8 +121,8 @@ def run_spark_job(spark, conf):
     join_query = join_df \
         .writeStream \
         .trigger(processingTime="10 seconds") \
+        .outputMode("append") \
         .format("console") \
-        .option("truncate", "false") \
         .start()
 
     join_query.awaitTermination()
