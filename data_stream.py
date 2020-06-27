@@ -72,8 +72,7 @@ def run_spark_job(spark, conf):
     # count the number of original crime type
     crime_type_count_agg_df = distinct_table.\
         groupBy("original_crime_type_name", psf.window("call_date_time", "10 minutes")).\
-        count().\
-        sort("count", ascending=False)
+        count()
 
     # Q1. Submit a screen shot of a batch ingestion of the aggregation
     # write output stream
@@ -89,8 +88,8 @@ def run_spark_job(spark, conf):
 
     crime_per_location_agg_df = distinct_table.\
         groupBy("city", psf.window("call_date_time", "10 minutes")).\
-        count().\
-        sort("count", ascending=False)
+        count()
+    
     logger.info("Streaming Count per Location")
     crime_per_location_query = crime_per_location_agg_df \
         .writeStream \
