@@ -1,6 +1,6 @@
 import time
 import logging
-
+import logging.config
 from configparser import ConfigParser
 from confluent_kafka import Consumer
 from confluent_kafka import OFFSET_BEGINNING
@@ -70,6 +70,7 @@ class ConsumerServer:
         logger.info(f"consumer {self.conf.get('consumer','group.id')} closed!!")
         
 if __name__ == "__main__":
+    logging.config.fileConfig("logging.ini")
     logger = logging.getLogger(__name__)
     config = ConfigParser()
     config.read("app.cfg")

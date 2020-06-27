@@ -1,6 +1,7 @@
 import json
 import time
 import logging
+import logging.config
 from configparser import ConfigParser
 from confluent_kafka import Producer
 from confluent_kafka.admin import AdminClient, NewTopic
@@ -107,7 +108,7 @@ class ProducerServer:
             logger.error("producer close incomplete - skipping")
             
 if __name__ == "__main__":
-    
+    logging.config.fileConfig("logging.ini")
     logger = logging.getLogger(__name__)
     config = ConfigParser()
     config.read("app.cfg")
