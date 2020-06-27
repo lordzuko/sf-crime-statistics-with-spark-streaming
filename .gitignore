@@ -20,7 +20,7 @@
 *.data
 *.json
 
-*.cfg
+!*.cfg
 
 storage.googleapis.com
 runs/*
