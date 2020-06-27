@@ -91,20 +91,20 @@ def run_spark_job(spark, conf):
     # # attach a ProgressReporter
     # crime_type_count_query.awaitTermination()
     # 
-    # crime_per_location_agg_df = distinct_table.\
-    #     groupBy("city", psf.window("call_date_time", "60 minutes")).\
-    #     count(). \
-    #     sort("count", ascending=False)
-    # 
-    # logger.info("Streaming Count per Location")
-    # crime_per_location_query = crime_per_location_agg_df \
-    #     .writeStream \
-    #     .trigger(processingTime="15 seconds") \
-    #     .outputMode("complete") \
-    #     .format("console") \
-    #     .start()
-    # # attach a ProgressReporter
-    # crime_per_location_query.awaitTermination()
+    crime_per_location_agg_df = distinct_table.\
+        groupBy("city", psf.window("call_date_time", "60 minutes")).\
+        count(). \
+        sort("count", ascending=False)
+
+    logger.info("Streaming Count per Location")
+    crime_per_location_query = crime_per_location_agg_df \
+        .writeStream \
+        .trigger(processingTime="15 seconds") \
+        .outputMode("complete") \
+        .format("console") \
+        .start()
+    # attach a ProgressReporter
+    crime_per_location_query.awaitTermination()
     
      
     # get the right radio code json path
