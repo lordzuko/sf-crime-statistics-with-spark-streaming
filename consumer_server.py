@@ -13,7 +13,7 @@ class ConsumerServer:
     def __init__(self, conf):
         self.conf = conf
         self.consumer = Consumer({
-            "bootstrap.servers": conf.get("consumer", "bootstrap.servers"),
+            "bootstrap.servers": conf.get("producer", "bootstrap.servers"),
             "auto.offset.reset": conf.get("consumer","auto.offset.reset"),
             "group.id": conf.get("consumer","group.id")
         })
