@@ -73,7 +73,7 @@ class ProducerServer:
                 data = json.loads(f.read())
                 logger.info(f"Reading {len(data)} lines from {self.conf.get('producer','input_file')}")
                 for idx, row in tqdm(enumerate(data), total=len(data), desc="Producer:> "):
-                    self.producer.poll(timeout=self.conf.get("producer", "consume_timeout"))
+                    self.producer.poll(timeout=self.conf.getfloat("producer", "consume_timeout"))
                     message = self.serialize_json(row)
                     logger.info(f"Serialized Data: {message}")
                     self.producer.produce(
