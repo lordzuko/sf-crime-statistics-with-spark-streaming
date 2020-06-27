@@ -127,23 +127,6 @@ def run_spark_job(spark, conf):
 
     join_query.awaitTermination()
 
-
-if __name__ == "__main__":
-    logger = logging.getLogger(__name__)
-
-    # TODO Create Spark in Standalone mode
-    spark = SparkSession \
-        .builder \
-        .master("local[*]") \
-        .appName("KafkaSparkStructuredStreaming") \
-        .getOrCreate()
-
-    logger.info("Spark started")
-
-    run_spark_job(spark)
-
-    spark.stop()
-
 if __name__ == "__main__":
     logging.config.fileConfig("logging.ini")
     logger = logging.getLogger(__name__)
