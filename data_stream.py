@@ -67,11 +67,11 @@ def run_spark_job(spark, conf):
     # select original_crime_type_name and disposition
     distinct_table = service_table \
         .select("original_crime_type_name", "disposition", "city", "call_date_time") \
-        .withWatermark("call_date_time", "15 minutes")
+        .withWatermark("call_date_time", "10 minutes")
 
     # count the number of original crime type
     crime_type_count_agg_df = distinct_table.\
-        groupBy("original_crime_type_name").\
+        groupBy("original_crime_type_name", psf.window("call_date_time", "10 minutes")).\
         count().\
         sort("count", ascending=False)
 
@@ -88,7 +88,7 @@ def run_spark_job(spark, conf):
     crime_type_count_query.awaitTermination()
 
     crime_per_location_agg_df = distinct_table.\
-        groupBy("city").\
+        groupBy("city", psf.window("call_date_time", "10 minutes")).\
         count().\
         sort("count", ascending=False)
     logger.info("Streaming Count per Location")
@@ -116,7 +116,7 @@ def run_spark_job(spark, conf):
     logger.info("Joinging agg data and radio codes")
     join_df = distinct_table \
         .join(radio_code_df, "disposition", "left") \
-        .select("original_crime_type_name", "description", "call_date_time")
+        .select("original_crime_type_name", "description")
 
     logger.info("Streaming crime type with their description")
     join_query = join_df \
