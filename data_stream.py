@@ -138,6 +138,7 @@ if __name__ == "__main__":
             .master(config.get("spark", "master")) \
             .appName("sf-crime-statistics") \
             .getOrCreate()
+    spark.sparkContext.setLogLevel("ERROR")
 
     logger.info("Starting Spark Session!!")
     run_spark_job(spark, config)
