@@ -117,7 +117,7 @@ def run_spark_job(spark, conf):
     # join on disposition column
     logger.info("Joinging agg data and radio codes")
     join_df = distinct_table \
-        .join(radio_code_df, "disposition", "left") \
+        .join(radio_code_df, "disposition") \
         .select("original_crime_type_name", "description")
 
     logger.info("Streaming crime type with their description")
