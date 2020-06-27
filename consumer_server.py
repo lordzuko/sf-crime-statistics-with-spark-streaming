@@ -1,4 +1,4 @@
-import json
+import time
 import logging
 
 from configparser import ConfigParser
@@ -39,6 +39,7 @@ class ConsumerServer:
                 num_results = 1
                 while num_results > 0:
                     num_results = self._consume()
+                    time.sleep(1.0)
             self.close()
         except KeyboardInterrupt as e:
             self.close()
@@ -52,6 +53,7 @@ class ConsumerServer:
                 return 1
             else:
                 logger.error(f"Some error in consumer {self.conf.get('consumer', 'group.id')}: {msg}")
+                return 0
         except Exception as e:
             logger.error(f"Error in consumer {self.conf.get('consumer','group.id')}: {e}")
             return 0
