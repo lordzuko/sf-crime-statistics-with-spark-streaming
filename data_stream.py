@@ -23,7 +23,10 @@ schema = StructType([
     StructField("address_type", StringType(), True),
     StructField("common_location", StringType(), True)
 ])
-
+radio_code_schema = StructType([
+        StructField("disposition_code", StringType(), True),
+        StructField("description", StringType(), True)
+    ])
 
 def run_spark_job(spark, conf):
 
@@ -106,7 +109,10 @@ def run_spark_job(spark, conf):
      
     # get the right radio code json path
     radio_code_json_filepath = conf.get("spark", "radio_code_file")
-    radio_code_df = spark.read.json(radio_code_json_filepath)
+    radio_code_df = spark.\
+        read.\
+        option("multiline", "true").\
+        json(radio_code_json_filepath, schema=radio_code_schema)
 
     # clean up your data so that the column names match on radio_code_df and agg_df
     # we will want to join on the disposition code
