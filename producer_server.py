@@ -27,16 +27,16 @@ class ProducerServer:
             self.create_topic()
             ProducerServer.existing_topics.add(conf.get("producer", "topic_name"))
 
-    def topic_exists(self):
+    def topic_exists(self, topic_name):
         """Checks if the given topic exists"""
         topics = self.client.list_topics(timeout=5)
-        return topics.topics.get(self.conf.get("producer", "topic_name")) is not None
+        return topics.topics.get(topic_name) is not None
 
     def create_topic(self):
         """
         Create topic if it doesn't exists
         """
-        exists = self.existing_topics(self.client)
+        exists = self.topic_exists(self.conf.get("producer", "topic_name"))
         if exists:
             logger.info(f"topic already exists: {self.conf.get('producer', 'topic_name')}")
         else:
