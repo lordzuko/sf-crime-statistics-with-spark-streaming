@@ -72,25 +72,25 @@ def run_spark_job(spark, conf):
         .select("original_crime_type_name", "disposition", "city", "call_date_time") \
         .withWatermark("call_date_time", "60 minutes")
 
-    # # count the number of original crime type
-    # crime_type_count_agg_df = distinct_table.\
-    #     groupBy("original_crime_type_name", psf.window("call_date_time", "60 minutes")).\
-    #     count(). \
-    #     sort("count", ascending=False)
-    # 
-    # # Q1. Submit a screen shot of a batch ingestion of the aggregation
-    # # write output stream
-    # logger.info("Streaming Count per Crime Type")
-    # crime_type_count_query = crime_type_count_agg_df \
-    #     .writeStream \
-    #     .trigger(processingTime="15 seconds") \
-    #     .outputMode("complete") \
-    #     .format("console") \
-    #     .option("truncate", "false") \
-    #     .start()
-    # # attach a ProgressReporter
-    # crime_type_count_query.awaitTermination()
-    # 
+    # count the number of original crime type
+    crime_type_count_agg_df = distinct_table.\
+        groupBy("original_crime_type_name", psf.window("call_date_time", "60 minutes")).\
+        count(). \
+        sort("count", ascending=False)
+
+    # Q1. Submit a screen shot of a batch ingestion of the aggregation
+    # write output stream
+    logger.info("Streaming Count per Crime Type")
+    crime_type_count_query = crime_type_count_agg_df \
+        .writeStream \
+        .trigger(processingTime="15 seconds") \
+        .outputMode("complete") \
+        .format("console") \
+        .option("truncate", "false") \
+        .start()
+    # attach a ProgressReporter
+    crime_type_count_query.awaitTermination()
+
     crime_per_location_agg_df = distinct_table.\
         groupBy("city", psf.window("call_date_time", "60 minutes")).\
         count(). \
