@@ -73,11 +73,13 @@ class ProducerServer:
                 data = json.loads(f.read())
                 logger.info(f"Reading {len(data)} lines from {self.conf.get('producer','input_file')}")
                 for idx, row in tqdm(enumerate(data), total=len(data), desc="Producer:> "):
+                    self.producer.poll(timeout=self.conf.get("producer", "consume_timeout"))
                     message = self.serialize_json(row)
                     logger.info(f"Serialized Data: {message}")
                     self.producer.produce(
                         topic=self.conf.get("producer","topic_name"),
-                        value=message
+                        value=message,
+                        callback=self.delivery_callback
                     )
                     time.sleep(1.0)
             logger.info("Processing complete \n Cleaning Producer!")
@@ -85,6 +87,17 @@ class ProducerServer:
 
         except KeyboardInterrupt as e:
             self.close()
+
+    @staticmethod
+    def delivery_callback(err, msg):
+        """
+        Callback triggered by produce function to check successful delivery
+        of message to broker
+        """
+        if err is not None:
+            logger.error(f"Failed to deliver message: {err}")
+        else:
+            logger.info(f"Successfully produced message to topic {msg.topic()}")
 
     def close(self):
         """Prepares the producer for exit by cleaning up the producer"""
