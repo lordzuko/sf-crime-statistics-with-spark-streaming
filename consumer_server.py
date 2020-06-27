@@ -45,7 +45,7 @@ class ConsumerServer:
     def _consume(self):
         """Polls for a message. Returns 1 if a message was received, 0 otherwise"""
         try:
-            msg = self.consumer.poll(timeout=self.conf.get("consumer","consume_timeout"))
+            msg = self.consumer.poll(timeout=self.conf.getfloat("consumer","consume_timeout"))
             if msg:
                 self.message_handler(msg)
                 return 1

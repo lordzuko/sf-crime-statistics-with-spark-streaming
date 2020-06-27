@@ -43,8 +43,8 @@ class ProducerServer:
             futures = self.client.create_topics([
                 NewTopic(
                     topic=self.conf.get("producer", "topic_name"),
-                    num_partitions=self.conf.get("producer", "num_partitions"),
-                    replication_factor=self.conf.get("producer", "replication_factor")
+                    num_partitions=self.conf.getint("producer", "num_partitions"),
+                    replication_factor=self.conf.getint("producer", "replication_factor")
                 )
             ])
 
