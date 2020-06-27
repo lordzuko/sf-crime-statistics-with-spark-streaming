@@ -40,7 +40,7 @@ class ConsumerServer:
                 # while num_results > 0:
                 self._consume()
                 time.sleep(1.0)
-            self.close()
+            
         except KeyboardInterrupt as e:
             self.close()
             
@@ -60,11 +60,11 @@ class ConsumerServer:
 
     def message_handler(self, msg):
         if msg is None:
-            logging.debug("No message received")
+            logger.info("No message received")
         elif msg.error():
-            logging.error(f"Consumer error: {msg.error()}")
+            logger.error(f"Consumer error: {msg.error()}")
         else:
-            logging.info(f"Message: {msg.value()}")
+            logger.info(f"Message: {msg.value()}")
 
     def close(self):
         """Cleans up any open kafka consumers"""
