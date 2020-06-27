@@ -1,6 +1,6 @@
 import json
+import time
 import logging
-
 from configparser import ConfigParser
 from confluent_kafka import Producer
 from confluent_kafka.admin import AdminClient, NewTopic
@@ -79,6 +79,7 @@ class ProducerServer:
                         topic=self.conf.get("producer","topic_name"),
                         value=message
                     )
+                    time.sleep(1.0)
             logger.info("Processing complete \n Cleaning Producer!")
             self.close()
 
