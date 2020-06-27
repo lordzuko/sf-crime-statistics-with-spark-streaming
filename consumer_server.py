@@ -62,7 +62,7 @@ class ConsumerServer:
         elif msg.error():
             logger.error(f"Consumer error: {msg.error()}")
         else:
-            logger.info(f"Message: {msg.value()}")
+            logger.info(f"Message: {msg.value().decode('utf-8')}")
 
     def close(self):
         """Cleans up any open kafka consumers"""
