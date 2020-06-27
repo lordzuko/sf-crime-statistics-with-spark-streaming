@@ -2,3 +2,8 @@ findspark
 pyspark
 python-dateutil
 pathlib
+confluent-kafka[avro]==1.1.0
+pandas==0.24.2
+requests==2.22.0
+tqdm
+tornado

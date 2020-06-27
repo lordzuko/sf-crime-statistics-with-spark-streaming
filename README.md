@@ -12,6 +12,32 @@ You can try to answer the following questions with the dataset:
 
 - What is the crime density by location?
 
+### **How to Run**
+- Required servers and installations can be done using `sh start.sh`, this will start the required servers.
+- Start the producer using `python producer_server.py`
+- Start the spark job using `spark-submit --packages org.apache.spark:spark-sql-kafka-0-10_2.11:2.3.0 data_stream.py`
+
+### **Output**
+- The output of the project is attached in the `screenshots` directory.
+
+### **Question 1**
+- ```How did changing values on the SparkSession property parameters affect the throughput and latency of the data?```
+    -  We can see change in`processedRowsPerSecond` (either increase or decrease in value). This number decides the throughput of the application.
+### **Question 2**
+- ```What were the 2-3 most efficient SparkSession property key/value pairs? Through testing multiple variations on values, how can you tell these were the most optimal? ```
+    - spark.sql.shuffle.partitions
+    - spark.streaming.kafka.maxRatePerPartition
+    - spark.default.parallelism
+    
+    Parallelism is decided by total number of available cpus on the device, hence making more cpus available will increase the throughput i.e. `processedRowsPerSecond`
+    
+    Number of partitions are decided by the `total dataset size / partition size`, the optimal number of partitions allows less movemet of data during join/wide operations, which increases the throughput.
+    
+    Maximum Rate Per Partition sets the inflow rate of message per partition, tuning this will decrease the number of unprocessed messages which will lead to better performance.
+    
+
+
+
 ### **Development Environment**
 
 You may choose to create your project in the workspace we provide here, or if you wish to develop your project locally, you will need to set up your environment properly as described below:
