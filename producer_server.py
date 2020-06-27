@@ -44,7 +44,7 @@ class ProducerServer:
                 NewTopic(
                     topic=self.conf.get("producer", "topic_name"),
                     num_partitions=self.conf.get("producer", "num_partitions"),
-                    replication_factor=self.conf.get("producer", "num_replicas")
+                    replication_factor=self.conf.get("producer", "replication_factor")
                 )
             ])
 
