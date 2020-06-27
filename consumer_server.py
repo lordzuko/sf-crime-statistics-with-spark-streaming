@@ -36,10 +36,10 @@ class ConsumerServer:
         """Asynchronously consumes data from kafka topic"""
         try:
             while True:
-                num_results = 1
-                while num_results > 0:
-                    num_results = self._consume()
-                    time.sleep(1.0)
+                # num_results = 1
+                # while num_results > 0:
+                self._consume()
+                time.sleep(1.0)
             self.close()
         except KeyboardInterrupt as e:
             self.close()
