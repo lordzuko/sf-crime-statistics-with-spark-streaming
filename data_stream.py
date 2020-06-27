@@ -67,11 +67,11 @@ def run_spark_job(spark, conf):
     # select original_crime_type_name and disposition
     distinct_table = service_table \
         .select("original_crime_type_name", "disposition", "city", "call_date_time") \
-        .withWatermark("call_date_time", "10 minutes")
+        .withWatermark("call_date_time", "60 minutes")
 
     # count the number of original crime type
     crime_type_count_agg_df = distinct_table.\
-        groupBy("original_crime_type_name", psf.window("call_date_time", "10 minutes")).\
+        groupBy("original_crime_type_name", psf.window("call_date_time", "60 minutes")).\
         count()
 
     # Q1. Submit a screen shot of a batch ingestion of the aggregation
@@ -79,7 +79,7 @@ def run_spark_job(spark, conf):
     logger.info("Streaming Count per Crime Type")
     crime_type_count_query = crime_type_count_agg_df \
         .writeStream \
-        .trigger(processingTime="10 seconds") \
+        .trigger(processingTime="15 seconds") \
         .outputMode("Complete") \
         .format("console") \
         .start()
@@ -87,13 +87,13 @@ def run_spark_job(spark, conf):
     crime_type_count_query.awaitTermination()
 
     crime_per_location_agg_df = distinct_table.\
-        groupBy("city", psf.window("call_date_time", "10 minutes")).\
+        groupBy("city", psf.window("call_date_time", "60 minutes")).\
         count()
     
     logger.info("Streaming Count per Location")
     crime_per_location_query = crime_per_location_agg_df \
         .writeStream \
-        .trigger(processingTime="10 seconds") \
+        .trigger(processingTime="15 seconds") \
         .outputMode("Complete") \
         .format("console") \
         .start()
@@ -120,7 +120,7 @@ def run_spark_job(spark, conf):
     logger.info("Streaming crime type with their description")
     join_query = join_df \
         .writeStream \
-        .trigger(processingTime="10 seconds") \
+        .trigger(processingTime="15 seconds") \
         .outputMode("append") \
         .format("console") \
         .start()
