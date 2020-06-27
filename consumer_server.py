@@ -19,6 +19,7 @@ class ConsumerServer:
             "auto.offset.reset": conf.get("consumer","auto.offset.reset"),
             "group.id": conf.get("consumer","group.id")
         })
+        self.consumer.subscribe([conf.get("consumer", "group.id")], on_assign=self.on_assign)
 
     def on_assign(self, consumer, partitions):
         """Callback for when topic assignment takes place"""
@@ -50,12 +51,7 @@ class ConsumerServer:
                 self.message_handler(msg)
                 return 1
             else:
-                if msg.error():
-                    logger.error(f"Some error in consumer {self.conf.get('consumer','group.id')}: {msg.error()}")
-                else:
-                    logger.error(f"Some error in consumer {self.conf.get('consumer', 'group.id')}")
-            
-        
+                logger.error(f"Some error in consumer {self.conf.get('consumer', 'group.id')}: {msg}")
         except Exception as e:
             logger.error(f"Error in consumer {self.conf.get('consumer','group.id')}: {e}")
             return 0
