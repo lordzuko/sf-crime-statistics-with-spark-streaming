@@ -80,7 +80,7 @@ class ProducerServer:
                         value=message,
                         callback=self.delivery_callback
                     )
-                    time.sleep(1.0)
+                    time.sleep(0.2)
             logger.info("Processing complete \n Cleaning Producer!")
             self.close()
 
